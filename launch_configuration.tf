@@ -1,6 +1,6 @@
 resource "aws_launch_configuration" "ecs-launch-configuration" {
     name                        = "ecs-launch-configuration"
-    image_id                    = "ami-fad25980"
+    image_id                    = "ami-04b1ddd35fd71475a"
     instance_type               = "t2.xlarge"
     iam_instance_profile        = aws_iam_instance_profile.ecs-instance-profile.id
 
@@ -14,7 +14,7 @@ resource "aws_launch_configuration" "ecs-launch-configuration" {
       create_before_destroy = true
     }
 
-    #security_groups             = [aws_security_group.test_public_sg.id]
+    security_groups     = [aws_security_group.allow_ssh.id]
     associate_public_ip_address = "true"
     key_name                    = var.ecs_key_pair_name
     user_data                   = <<EOF

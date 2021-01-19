@@ -1,18 +1,6 @@
-resource "aws_vpc" "my_vpc" {
-  cidr_block       = var.cidrblock_vpc
-  enable_dns_hostnames = true
-  enable_dns_support = "true" #gives you an internal domain name
-  enable_classiclink = "false"
-  instance_tenancy = "default"
-
-  tags = {
-    Name = "My VPC"
-  }
-}
-
 resource "aws_subnet" "public" {
   vpc_id     = aws_vpc.my_vpc.id
-  cidr_block = var.cidrblock_public_1
+  cidr_block = var.cidrblock["public_subnet"]["public"]
   availability_zone = "us-east-1a"
 
   tags = {

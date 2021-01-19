@@ -1,7 +1,8 @@
 resource "aws_alb" "ecs-load-balancer" {
     name                = "ecs-load-balancer"
     security_groups     = [aws_security_group.allow_ssh.id]
-     subnets             = [ var.lb_cidr_01 , var.lb_cidr_02]
+     subnets             = [ var.cidrblock["loadbancer_IP01"]["loadpublic01"] , var.cidrblock["loadbancer_IP02"]["loadpublic02"]]
+
 
     tags = {
       Name = "ecs-load-balancer"

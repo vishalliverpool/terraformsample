@@ -1,6 +1,6 @@
 resource "aws_subnet" "prod-subnet-private-1" {
     vpc_id = aws_vpc.my_vpc.id
-    cidr_block = "10.0.1.0/24"
+    cidr_block = var.cidrblock["private_subnet"]["private"]
     availability_zone = "eu-west-2a"
     map_public_ip_on_launch = false
     tags = {
