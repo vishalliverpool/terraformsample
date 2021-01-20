@@ -3,6 +3,6 @@ resource "aws_subnet" "prod-subnet-private-1" {
     cidr_block = var.cidrblock["private"]
     availability_zone = "us-east-1b"
     tags = {
-        Name = "prod-subnet-private-1"
+        Name = "private-subnet"
     }
 }
