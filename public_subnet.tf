@@ -1,10 +1,22 @@
+resource "aws_vpc" "my_vpc" {
+  cidr_block       = var.cidrblock_vpc
+  enable_dns_hostnames = true
+  enable_dns_support = "true" #gives you an internal domain name
+  enable_classiclink = "false"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "My VPC"
+  }
+}
+
 resource "aws_subnet" "public" {
   vpc_id     = aws_vpc.my_vpc.id
-   cidr_block = var.cidrblock["public"]
+  cidr_block = var.cidrblock_public_1
   availability_zone = "us-east-1a"
 
   tags = {
-    Name = "Public_Subnet"
+    Name = "Public Subnet_1"
   }
 }
 
@@ -12,11 +24,11 @@ resource "aws_internet_gateway" "my_vpc_igw" {
   vpc_id = aws_vpc.my_vpc.id
 
   tags = {
-    Name = "My-VPC-Internet Gateway"
+    Name = "My VPC - Internet Gateway"
   }
 }
 
-resource "aws_route_table" "public_rt" {
+resource "aws_route_table" "my_vpc_us_east_1a_public" {
     vpc_id = aws_vpc.my_vpc.id
 
     route {
@@ -29,9 +41,9 @@ resource "aws_route_table" "public_rt" {
     }
 }
 
-resource "aws_route_table_association" "public_rt" {
+resource "aws_route_table_association" "my_vpc_us_east_1a_public" {
     subnet_id = aws_subnet.public.id
-    route_table_id = aws_route_table.public_rt.id
+    route_table_id = aws_route_table.my_vpc_us_east_1a_public.id
 }
 
 resource "aws_security_group" "allow_ssh" {
