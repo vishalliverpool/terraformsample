@@ -1,5 +1,5 @@
 data "template_file" "user_data" {
-template = file("/root/test/ecs_terraform_1/userdata.tpl")
+template = file("/ECS_terraform/userdata.tpl")
 }
 
 
