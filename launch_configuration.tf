@@ -1,3 +1,8 @@
+data "template_file" "user_data" {
+template = file("/root/test/ecs_terraform_1/userdata.tpl")
+}
+
+
 resource "aws_launch_configuration" "ecs-launch-configuration" {
 name = "ecs-launch-configuration"
 image_id = "ami-0dc161e2e5f144ffc"
@@ -20,9 +25,6 @@ key_name = var.ecs_key_pair_name
 
 # register the cluster name with ecs-agent which will in turn coord
 # with the AWS api about the cluster
-user_data = <<EOF
-            #!/bin/bash
-            echo 'ECS_CLUSTER=my-cluster' >> /etc/ecs/ecs.config
-            echo 'ECS_DISABLE_PRIVILEGED=true' >> /etc/ecs/ecs.config
-            EOF
+
+user_data = data.template_file.user_data.rendered
 }
