@@ -12,3 +12,19 @@ variable "availability_zone" {
     us-east-1 = "us-east-1"
   }
 }
+variable "cpu" {
+type = number
+description = "number of cpu required for the task to run"
+default = 1024
+}
+
+variable "memory" {
+type = number
+description = "memory reqired for the task to run"
+default = 2048
+}
+variable "tag" {
+type = string
+description = "image tag"
+default = "latest"
+}
