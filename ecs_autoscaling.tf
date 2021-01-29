@@ -38,7 +38,7 @@ metric_name = "MemoryReservation"
 namespace = "AWS/ECS"
 period = "120"
 statistic = "Average"
-threshold = "50"
+threshold = "70"
 dimensions = {
 AutoScalingGroupName = aws_autoscaling_group.ecs-autoscaling-group.name
 }
@@ -69,7 +69,7 @@ metric_name = "MemoryReservation"
 namespace = "AWS/ECS"
 period = "120"
 statistic = "Average"
-threshold = "50"
+threshold = "40"
 dimensions = {
 AutoScalingGroupName = aws_autoscaling_group.ecs-autoscaling-group.name
 }
