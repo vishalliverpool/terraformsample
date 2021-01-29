@@ -16,29 +16,63 @@ tags = [
 ]
 }
 
-# Attach an autoscaling policy to the spot cluster to target 50% MemoryReservation on the ECS cluster.
-resource "aws_autoscaling_policy" "ecs_cluster_scale_policy" {
-  name = "my-cluster"
-  policy_type = "TargetTrackingScaling"
-  adjustment_type = "ChangeInCapacity"
-  lifecycle {
-    ignore_changes = [
-      adjustment_type
-    ]
-  }
-  autoscaling_group_name = aws_autoscaling_group.ecs-autoscaling-group.name
+# scale out alarm policy
 
-  target_tracking_configuration {
-    customized_metric_specification {
-      metric_dimension {
-        name = "ClusterName"
-        value = "my-cluster"
-      }
-      metric_name = "MemoryReservation"
-      namespace = "AWS/ECS"
-      statistic = "Average"
-    }
-    target_value = 50.0
-  }
+resource "aws_autoscaling_policy" "test-memory-policy-scaleout" {
+name = "example-memory-policy-scaleout"
+autoscaling_group_name = aws_autoscaling_group.ecs-autoscaling-group.name
+adjustment_type = "ChangeInCapacity"
+scaling_adjustment = "1"
+cooldown = "300"
+policy_type = "SimpleScaling"
 }
 
+# scaleout-cloud metric
+
+resource "aws_cloudwatch_metric_alarm" "example-memory-alarm" {
+alarm_name = "example-memory-alarm-scaleout"
+alarm_description = "example-memory-scaleout"
+comparison_operator = "GreaterThanOrEqualToThreshold"
+evaluation_periods = "2"
+metric_name = "MemoryReservation"
+namespace = "AWS/ECS"
+period = "120"
+statistic = "Average"
+threshold = "50"
+dimensions = {
+AutoScalingGroupName = aws_autoscaling_group.ecs-autoscaling-group.name
+}
+actions_enabled = true
+alarm_actions = [aws_autoscaling_policy.test-memory-policy-scaleout.arn]
+}
+
+
+# scale in alarm
+
+resource "aws_autoscaling_policy" "test-memory-policy-scalein" {
+name = "example-memory-policy-scaledown"
+autoscaling_group_name = aws_autoscaling_group.ecs-autoscaling-group.name
+adjustment_type = "ChangeInCapacity"
+scaling_adjustment = "-1"
+cooldown = "300"
+policy_type = "SimpleScaling"
+}
+
+#scalein metric
+
+resource "aws_cloudwatch_metric_alarm" "example-memory-alarm-scalein" {
+alarm_name = "example-memory-alarm-scalein"
+alarm_description = "example-memory-alarm-scalein"
+comparison_operator = "LessThanOrEqualToThreshold"
+evaluation_periods = "2"
+metric_name = "MemoryReservation"
+namespace = "AWS/ECS"
+period = "120"
+statistic = "Average"
+threshold = "50"
+dimensions = {
+AutoScalingGroupName = aws_autoscaling_group.ecs-autoscaling-group.name
+}
+actions_enabled = true
+alarm_actions = [aws_autoscaling_policy.test-memory-policy-scalein.arn]
+}
