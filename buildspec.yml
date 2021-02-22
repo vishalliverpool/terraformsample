@@ -10,7 +10,7 @@ phases:
     commands:
       - wget https://releases.hashicorp.com/terraform/0.10.4/terraform_0.10.4_linux_amd64.zip
       - unzip terraform_0.10.4_linux_amd64.zip
-      - sudo mv terraform /usr/local/bin
+      - mv terraform /usr/local/bin
       - rm terraform_0.10.4_linux_amd64.zip
   build:
     commands:
